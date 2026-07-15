@@ -1,0 +1,34 @@
+- name: Automatizacion de servidores Ubuntu con Ansible
+  hosts: servers
+  become: yes  # Ejecutar tareas como administrador (sudo)
+
+  tasks:
+    - name: 1. Actualizar los paquetes de APT del sistema operativo
+      apt:
+        update_cache: yes
+        upgrade: dist
+
+    - name: 2. Crear el usuario 'itla' en cada servidor
+      user:
+        name: itla
+        state: present
+        shell: /bin/bash
+
+    - name: 3. Crear una carpeta llamada 'app'
+      file:
+        path: /app
+        state: directory
+        mode: '0755'
+
+    - name: 4. Crear un archivo 'hola.txt' en la carpeta '/app'
+      copy:
+        dest: /app/hola.txt
+        content: "Hola Mundo desde Ansible!"
+        mode: '0644'
+
+    - name: 5. Instalar 'cowsay' e 'htop' en cada servidor
+      apt:
+        name:
+          - cowsay
+          - htop
+        state: present
